@@ -1,0 +1,18 @@
+type nul > "C:\NaukriBot\config\config.py"
+
+fi;le create karne ke lkiye 
+
+
+C:\NaukriBot>notepad C:\NaukriBot\src\resume_upload.py
+
+C:\NaukriBot>✅ resume_headline.py
+'✅' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\NaukriBot>notepad C:\NaukriBot\src\resume_headline.py
+
+C:\NaukriBot>notepad C:\NaukriBot\src\profile_summary.py
+
+C:\NaukriBot>notepad C:\NaukriBot\src\keyskills.py
+
+C:\NaukriBot>notepad C:\NaukriBot\src\employment.py
