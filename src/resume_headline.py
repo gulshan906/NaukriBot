@@ -3,11 +3,13 @@
 Project : NaukriBot
 Module  : resume_headline.py
 Author  : Gulshan Singh
-Version : 2.1.0
+Version : 2.2.0
 ===========================================================
 """
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 from config.config import PROFILE_URL
 
@@ -80,7 +82,9 @@ def update_resume_headline(driver):
             f"Updated Headline : {updated_text}"
         )
 
-        logger.info("Headline Modified")
+        logger.info(
+            "Headline Modified"
+        )
 
         # -----------------------------------------
         # Submit Form
@@ -97,6 +101,31 @@ def update_resume_headline(driver):
         logger.info(
             "Resume Headline Updated Successfully."
         )
+
+        # ==========================================
+        # Refresh Profile
+        # ==========================================
+
+        driver.refresh()
+
+        WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located(
+                (
+                    By.CSS_SELECTOR,
+                    "span.edit.icon"
+                )
+            )
+        )
+
+        sleep(2)
+
+        logger.info(
+            "Profile Refreshed Successfully."
+        )
+
+        # ==========================================
+        # Final Screenshot
+        # ==========================================
 
         screenshot = take_screenshot(
             driver,
@@ -129,7 +158,6 @@ New Headline
             subject="✅ Resume Headline - SUCCESS",
             body=result["message"],
             attachment=screenshot
-
         )
 
         return result

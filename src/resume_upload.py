@@ -3,7 +3,7 @@
 Project : NaukriBot
 Module  : resume_upload.py
 Author  : Gulshan Singh
-Version : 2.1.0
+Version : 2.2.0
 ===========================================================
 """
 
@@ -63,6 +63,23 @@ def upload_resume(driver):
         logger.info(
             "Resume Uploaded Successfully."
         )
+
+        # ==========================================
+        # Refresh Profile
+        # ==========================================
+
+        driver.refresh()
+
+        WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located(
+                (By.ID, "attachCV")
+            )
+        )
+
+        logger.info(
+            "Profile Refreshed Successfully."
+        )
+
 
         screenshot = take_screenshot(
             driver,

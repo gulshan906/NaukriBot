@@ -3,12 +3,14 @@
 Project : NaukriBot
 Module  : keyskills.py
 Author  : Gulshan Singh
-Version : 3.0.0
+Version : 3.1.0
 ===========================================================
 """
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 from config.config import PROFILE_URL, KEY_SKILL
 
@@ -108,6 +110,31 @@ def update_key_skills(driver):
         logger.info(
             "Key Skills Updated Successfully."
         )
+
+        # ==========================================
+        # Refresh Profile
+        # ==========================================
+
+        driver.refresh()
+
+        WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located(
+                (
+                    By.ID,
+                    "saveKeySkills"
+                )
+            )
+        )
+
+        sleep(2)
+
+        logger.info(
+            "Profile Refreshed Successfully."
+        )
+
+        # ==========================================
+        # Final Screenshot
+        # ==========================================
 
         screenshot = take_screenshot(
             driver,

@@ -49,19 +49,37 @@ def sleep(seconds):
 
 def take_screenshot(driver, name="screenshot"):
 
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    try:
 
-    file_name = f"{name}_{timestamp}.png"
+        # Today's Folder
+        today = datetime.now().strftime("%Y-%m-%d")
 
-    file_path = SCREENSHOT_DIR / file_name
+        folder = SCREENSHOT_DIR / today
 
-    driver.save_screenshot(str(file_path))
+        folder.mkdir(
+            parents=True,
+            exist_ok=True
+        )
 
-    logger.info(f"Screenshot Saved : {file_path}")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-    return file_path
+        file_name = f"{name}_{timestamp}.png"
 
+        file_path = folder / file_name
 
+        driver.save_screenshot(str(file_path))
+
+        logger.info(
+            f"Screenshot Saved : {file_path}"
+        )
+
+        return file_path
+
+    except Exception as e:
+
+        logger.exception(e)
+
+        return None
 # ===========================================================
 # Wait for Element
 # ===========================================================
