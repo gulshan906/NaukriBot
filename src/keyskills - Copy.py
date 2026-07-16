@@ -116,8 +116,17 @@ def update_key_skills(driver):
         # ==========================================
 
         driver.refresh()
-		
-        sleep(5)
+
+        WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located(
+                (
+                    By.ID,
+                    "saveKeySkills"
+                )
+            )
+        )
+
+        sleep(2)
 
         logger.info(
             "Profile Refreshed Successfully."

@@ -157,6 +157,21 @@ NAUKRI_HOME = "https://www.naukri.com"
 
 PROFILE_URL = "https://www.naukri.com/mnjuser/profile?id=&altresid"
 
+# ===========================================================
+# Naukri Login Credentials
+# ===========================================================
+
+LOGIN_URL = "https://www.naukri.com/nlogin/login"
+
+NAUKRI_EMAIL = os.getenv(
+    "NAUKRI_EMAIL",
+    ""
+)
+
+NAUKRI_PASSWORD = os.getenv(
+    "NAUKRI_PASSWORD",
+    ""
+)
 
 # ===========================================================
 # Gmail Configuration

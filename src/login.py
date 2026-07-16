@@ -29,14 +29,18 @@ def save_cookies(driver):
 
     try:
 
+        cookies = driver.get_cookies()
+
         with open(COOKIE_FILE, "wb") as file:
 
             pickle.dump(
-                driver.get_cookies(),
+                cookies,
                 file
             )
 
-        logger.info("Cookies Saved Successfully.")
+        logger.info(
+            f"Saved {len(cookies)} Cookies Successfully."
+        )
 
         return True
 
@@ -45,7 +49,6 @@ def save_cookies(driver):
         logger.exception(e)
 
         return False
-
 
 # ===========================================================
 # Load Cookies
@@ -62,6 +65,18 @@ def load_cookies(driver):
 
             logger.warning(
                 "Cookie File Not Found."
+            )
+
+            return False
+
+        if COOKIE_FILE.stat().st_size == 0:
+
+            logger.warning(
+                "Cookie File Empty."
+            )
+
+            COOKIE_FILE.unlink(
+                missing_ok=True
             )
 
             return False
@@ -89,6 +104,18 @@ def load_cookies(driver):
         )
 
         return True
+
+    except (EOFError, pickle.UnpicklingError):
+
+        logger.warning(
+            "Cookie File Corrupted. Deleting..."
+        )
+
+        COOKIE_FILE.unlink(
+            missing_ok=True
+        )
+
+        return False
 
     except Exception as e:
 
@@ -149,6 +176,12 @@ def ensure_login(driver):
     )
 
     load_cookies(driver)
+
+    if not COOKIE_FILE.exists():
+
+        logger.info(
+            "Starting Fresh Session."
+        )
 
     if is_logged_in(driver):
 
