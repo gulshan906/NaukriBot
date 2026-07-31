@@ -1,11 +1,9 @@
-"""
-===========================================================
-Project : NaukriBot
-Module  : keyskills.py
-Author  : Gulshan Singh
-Version : 3.1.0
-===========================================================
-"""
+# ===========================================================
+# Project : NaukriBot
+# Module  : keyskills.py
+# Author  : Gulshan Singh
+# Version : 3.1.0
+# ===========================================================
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -116,12 +114,19 @@ def update_key_skills(driver):
         # ==========================================
 
         driver.refresh()
-		
+
         sleep(5)
 
         logger.info(
             "Profile Refreshed Successfully."
         )
+
+        # ==========================================
+        # Open Naukri Home Page
+        # ==========================================
+        driver.get("https://www.naukri.com/mnjuser/homepage")
+        sleep(2)
+        logger.info("Naukri Home Page Opened Successfully.")
 
         # ==========================================
         # Final Screenshot
@@ -167,7 +172,6 @@ SUCCESS
         )
 
         result["status"] = False
-
         result["message"] = str(e)
 
         try:
@@ -179,7 +183,6 @@ SUCCESS
             )
 
         except Exception:
-
             pass
 
         return result

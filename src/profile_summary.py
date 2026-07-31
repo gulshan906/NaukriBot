@@ -215,12 +215,19 @@ def update_profile_summary(driver):
         )
 
         # ==========================================
+        # Open Naukri Home Page
+        # ==========================================
+        driver.get("https://www.naukri.com/mnjuser/homepage")
+        sleep(2)
+        logger.info("Naukri Home Page Opened Successfully.")
+
+        # ==========================================
         # Final Screenshot
         # ==========================================
 
         screenshot = take_screenshot(
             driver,
-            "profile_summary_updated"
+            "naukri_homepage"
         )
 
         result["status"] = True

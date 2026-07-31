@@ -3,7 +3,7 @@
 Project : NaukriBot
 Module  : resume_headline.py
 Author  : Gulshan Singh
-Version : 2.2.0
+Version : 2.2.1
 ===========================================================
 """
 
@@ -32,7 +32,7 @@ def update_resume_headline(driver):
 
         driver.get(PROFILE_URL)
 
-        sleep(5)
+        sleep(2)
 
         logger.info("Opening Resume Headline Popup...")
 
@@ -87,16 +87,22 @@ def update_resume_headline(driver):
         )
 
         # -----------------------------------------
-        # Submit Form
+        # Click Save Button
         # -----------------------------------------
 
-        driver.execute_script(
-            """
-            document.forms['resumeHeadlineForm'].submit();
-            """
+        logger.info("Clicking Save Button...")
+
+        save_btn = driver.find_element(
+            By.XPATH,
+            "//button[@type='submit' and normalize-space()='Save']"
         )
 
-        sleep(5)
+        driver.execute_script(
+            "arguments[0].click();",
+            save_btn
+        )
+
+        sleep(2)
 
         logger.info(
             "Resume Headline Updated Successfully."
@@ -124,12 +130,19 @@ def update_resume_headline(driver):
         )
 
         # ==========================================
+        # Open Naukri Home Page
+        # ==========================================
+        driver.get("https://www.naukri.com/mnjuser/homepage")
+        sleep(2)
+        logger.info("Naukri Home Page Opened Successfully.")
+
+        # ==========================================
         # Final Screenshot
         # ==========================================
 
         screenshot = take_screenshot(
             driver,
-            "resume_headline_updated"
+            "naukri_homepage"
         )
 
         result["status"] = True

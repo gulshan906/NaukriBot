@@ -217,6 +217,12 @@ def update_employment(driver):
         logger.info(
             "Profile Refreshed Successfully."
         )
+        # ==========================================
+        # Open Naukri Home Page
+        # ==========================================
+        driver.get("https://www.naukri.com/mnjuser/homepage")
+        sleep(2)
+        logger.info("Naukri Home Page Opened Successfully.")
 
         # ==========================================
         # Final Screenshot
@@ -224,7 +230,7 @@ def update_employment(driver):
 
         screenshot = take_screenshot(
             driver,
-            "employment_updated"
+            "naukri_homepage"
         )
 
         result["status"] = True
