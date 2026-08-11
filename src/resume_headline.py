@@ -41,7 +41,7 @@ def update_resume_headline(driver):
             "span.edit.icon"
         ).click()
 
-        sleep(3)
+        sleep(1)
 
         headline_box = driver.find_element(
             By.ID,

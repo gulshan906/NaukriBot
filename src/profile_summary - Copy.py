@@ -1,7 +1,7 @@
 """
 ===========================================================
 Project : NaukriBot
-Module  : employment.py
+Module  : profile_summary.py
 Author  : Gulshan Singh
 Version : 2.2.0
 ===========================================================
@@ -18,10 +18,10 @@ from src.mail import send_email
 from src.utils import sleep, take_screenshot
 
 
-def update_employment(driver):
+def update_profile_summary(driver):
 
     result = {
-        "module": "Employment",
+        "module": "Profile Summary",
         "status": False,
         "message": ""
     }
@@ -32,25 +32,21 @@ def update_employment(driver):
 
         driver.get(PROFILE_URL)
 
-        sleep(2)
+        sleep(8)
 
-        logger.info("Scrolling to Employment Section...")
+        logger.info("Scrolling to Profile Summary...")
 
         driver.execute_script(
             """
-            var el = document.getElementById(
-                'lazyEmployment'
-            );
-
-            if(el){
-                el.scrollIntoView(
-                    {behavior:'smooth'}
-                );
-            }
+            document.getElementById(
+                'lazyProfileSummary'
+            ).scrollIntoView();
             """
         )
 
-        sleep(5)
+        sleep(3)
+
+        logger.info("Searching Profile Summary Edit Icon...")
 
         edit_icons = driver.find_elements(
             By.XPATH,
@@ -61,33 +57,34 @@ def update_employment(driver):
             f"Total Edit Icons Found : {len(edit_icons)}"
         )
 
-        employment_icon = None
+        summary_icon = None
 
         for icon in edit_icons:
 
             try:
 
-                icon.find_element(
+                parent = icon.find_element(
                     By.XPATH,
-                    "./ancestor::div[contains(@class,'emp-list')]"
+                    "./ancestor::div[contains(@class,'widgetHead')]"
                 )
 
-                employment_icon = icon
+                if "Profile summary" in parent.text:
 
-                break
+                    summary_icon = icon
+                    break
 
             except Exception:
 
                 pass
 
-        if employment_icon is None:
+        if summary_icon is None:
 
             result["message"] = (
-                "Employment Edit Icon Not Found."
+                "Profile Summary Edit Icon Not Found."
             )
 
             send_email(
-                subject="❌ Employment - FAILED",
+                subject="❌ Profile Summary - FAILED",
                 body=result["message"]
             )
 
@@ -95,29 +92,29 @@ def update_employment(driver):
 
         driver.execute_script(
             "arguments[0].click();",
-            employment_icon
+            summary_icon
         )
 
         logger.info(
-            "Employment Popup Opened."
+            "Profile Summary Popup Opened."
         )
 
         sleep(5)
 
-        desc_box = driver.find_element(
+        summary_box = driver.find_element(
             By.ID,
-            "jobDescription"
+            "profileSummaryTxt"
         )
 
-        current_text = desc_box.get_attribute(
+        current_text = summary_box.get_attribute(
             "value"
         )
 
         logger.info(
-            "Current Employment Description Loaded."
+            "Current Profile Summary Loaded."
         )
 
-        print("\nCurrent Employment Description\n")
+        print("\nCurrent Summary\n")
 
         print(current_text)
 
@@ -125,15 +122,20 @@ def update_employment(driver):
         # Existing Logic (No Change)
         # ---------------------------------------
 
-        if current_text.strip().endswith("|"):
+        if current_text.strip().endswith(
+            " Updated"
+        ):
 
-            new_text = current_text.rstrip("|").rstrip()
+            new_text = current_text.replace(
+                " Updated",
+                ""
+            )
 
         else:
 
-            new_text = current_text + " |"
+            new_text = current_text + " Updated"
 
-        print("\nNew Employment Description\n")
+        print("\nNew Summary\n")
 
         print(new_text)
 
@@ -155,15 +157,15 @@ def update_employment(driver):
                 )
             );
             """,
-            desc_box,
+            summary_box,
             new_text
         )
 
         sleep(2)
 
         save_btn = driver.find_element(
-            By.ID,
-            "submitEmployment"
+            By.CSS_SELECTOR,
+            "button.btn-dark-ot"
         )
 
         driver.execute_script(
@@ -175,10 +177,10 @@ def update_employment(driver):
             "Save Button Clicked."
         )
 
-        sleep(2)
+        sleep(5)
 
         logger.info(
-            "Employment Updated Successfully."
+            "Profile Summary Updated Successfully."
         )
 
         # ==========================================
@@ -191,7 +193,7 @@ def update_employment(driver):
             EC.presence_of_element_located(
                 (
                     By.ID,
-                    "lazyEmployment"
+                    "lazyProfileSummary"
                 )
             )
         )
@@ -200,15 +202,9 @@ def update_employment(driver):
 
         driver.execute_script(
             """
-            var el = document.getElementById(
-                'lazyEmployment'
-            );
-
-            if(el){
-                el.scrollIntoView(
-                    {behavior:'smooth'}
-                );
-            }
+            document.getElementById(
+                'lazyProfileSummary'
+            ).scrollIntoView();
             """
         )
 
@@ -217,6 +213,7 @@ def update_employment(driver):
         logger.info(
             "Profile Refreshed Successfully."
         )
+
         # ==========================================
         # Open Naukri Home Page
         # ==========================================
@@ -236,16 +233,16 @@ def update_employment(driver):
         result["status"] = True
 
         result["message"] = f"""
-Employment Updated Successfully
+Profile Summary Updated Successfully
 
 ----------------------------------------
-Old Employment Description
+Old Profile Summary
 ----------------------------------------
 
 {current_text}
 
 ----------------------------------------
-New Employment Description
+New Profile Summary
 ----------------------------------------
 
 {new_text}
@@ -256,7 +253,7 @@ New Employment Description
         # ==========================================
 
         send_email(
-            subject="✅ Employment - SUCCESS",
+            subject="✅ Profile Summary - SUCCESS",
             body=result["message"],
             attachment=screenshot
         )
@@ -269,7 +266,7 @@ New Employment Description
 
         failed_screenshot = take_screenshot(
             driver,
-            "employment_failed"
+            "profile_summary_failed"
         )
 
         result["message"] = str(e)
@@ -277,7 +274,7 @@ New Employment Description
         try:
 
             send_email(
-                subject="❌ Employment - FAILED",
+                subject="❌ Profile Summary - FAILED",
                 body=result["message"],
                 attachment=failed_screenshot
             )

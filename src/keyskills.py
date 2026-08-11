@@ -89,7 +89,7 @@ def update_key_skills(driver):
             Keys.ENTER
         )
 
-        sleep(3)
+        sleep(1)
 
         save_btn = driver.find_element(
             By.ID,
